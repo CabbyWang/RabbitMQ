@@ -1,0 +1,11 @@
+{
+    "workbench.colorCustomizations": {
+        "tab.activeBorder": "#EA4141",
+        "tab.unfocusedActiveBorder": "#fff0",
+        "titleBar.activeBackground": "#EA4141",
+        "titleBar.activeForeground": "#000000",
+        "statusBar.background": "#EA4141",
+        "statusBar.foreground": "#000000"
+    },
+    "python.pythonPath": "D:\\Software\\Conda\\envs\\rabbit\\python.exe"
+}
