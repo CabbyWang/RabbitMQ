@@ -25,7 +25,7 @@ python receive.py
 python send.py
 ```
 
-### Work Queues
+### 工作队列(Work Queues)
 
 [官方文档](https://www.rabbitmq.com/tutorials/tutorial-two-python.html)
 
@@ -104,6 +104,47 @@ rabbitmqctl.bat list_queues name messages_ready messages_unacknowledged
 #### 3. 公平调度(Fair dispatch)
 
 使用`basic.qos`方法，并设置`prefetch_count=1`，告诉`RabbitMQ`同一时刻，不要发送超过一条消息给一个worker， 直到它已经处理了上一条消息并作出了响应。这样，`RabbitMQ`就会把消息分发给下一个空闲的worker。
+
+### 发布/订阅(Pulish/Subscribe)
+
+分发一个消息给多个消费者(consumer)。
+
+RabbitMQ消息模型的核心理念是：发布者(producer)不会直接发送任何消息给队列
+。事实上，发布者甚至不知道消息是否已经被投递到队列。
+
+#### 1. 交换机(Exchange)
+
+交换机类型： 直连交换机(direct)，主题交换机(topic)，头交换机(headers)，扇形交换机(fanout)。
+
+这里使用扇形交换机，把消息发送给它所绑定的所有队列。
+
+```python
+channel.exchange_declare(exchange='logs', exchange_type='fanout')
+```
+
+```bash
+sudo rabbitmqctl list_exchanges  # 列出服务器上所有的交换机
+```
+
+#### 2. 临时队列(Temporary queues)
+
+```python
+result = channel.queue_declare(queue='', exclusive=True)  # 消费者断开时， 队列立即删除
+
+queue_name = result.method.queue  # 队列名
+```
+
+#### 3. 绑定(Bindings)
+
+将队列绑定到交换机上
+
+```python
+channel.queue_bind(queue=queue_name, exchange='logs')
+```
+
+```bash
+sudo rabbitmqctl list_bindings  # 查看存在的队列绑定
+```
 
 其他链接:
 
