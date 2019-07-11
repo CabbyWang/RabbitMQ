@@ -12,7 +12,6 @@ channel.exchange_declare(exchange='logs', exchange_type='fanout')
 # 发送消息
 message = ' '.join(sys.argv[1:]) or 'info: Hello World!'
 
-# 消息持久化
 channel.basic_publish(
     exchange='logs', routing_key='', body=message
 )

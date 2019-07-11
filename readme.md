@@ -146,6 +146,34 @@ channel.queue_bind(queue=queue_name, exchange='logs')
 sudo rabbitmqctl list_bindings  # 查看存在的队列绑定
 ```
 
+### 路由(Routing)
+
+在广播的基础上新增功能--订阅消息的一个子集。例如，只输出error日志，或者全部日志输出。
+
+这里使用直连交换机，把消息发送给绑定它的队列。绑定的时候可以带上一个额外的`routing_key`。
+
+- 发送`routing_key`为error的日志
+
+    ```python
+    channel.basic_publish(
+        exchange='direct_logs',
+        routing_key='error',
+        body='message'
+    )
+    ```
+
+- 订阅`routing_key`为error的日志
+
+    ```python
+    channel.queue_bind(
+        queue=queue_name,
+        exchange='direct_logs',
+        routing_key='error'
+    )
+    ```
+
+**绑定值`routing_key`的意义取决于交换机`exchange`的类型, 扇形交换机(fanout exchanges)会忽略这个值**
+
 其他链接:
 
 [Top 10 Uses For A Message Queue](https://blog.iron.io/top-10-uses-for-message-queue/?spref=tw)
